@@ -1,6 +1,7 @@
 package cn.bt.btdemo.dao;
 
 import cn.bt.btdemo.entity.admin.Admin;
+import cn.bt.btdemo.entity.admin.SysPerm;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -26,5 +27,7 @@ public interface IAdminDao {
     void deleteAdminByCondition(Admin admin);
 
     void batchSaveAdmin(List<Admin> admins);
-/*-------------------------------------------------generated code end,do not update-----------------------------------------------------------*/
+
+    /*-------------------------------------------------generated code end,do not update-----------------------------------------------------------*/
+    List<SysPerm> findSysFuncPermsByAdminId(String adminId);
 }

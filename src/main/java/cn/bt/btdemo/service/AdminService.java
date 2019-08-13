@@ -2,6 +2,7 @@ package cn.bt.btdemo.service;
 
 import cn.bt.btdemo.dao.IAdminDao;
 import cn.bt.btdemo.entity.admin.Admin;
+import cn.bt.btdemo.entity.admin.SysPerm;
 import cn.bt.btdemo.util.SequenceId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,4 +56,9 @@ public class AdminService {
         adminDao.batchSaveAdmin(admins);
     }
 /*-------------------------------------------------generated code end,do not update-----------------------------------------------------------*/
+    //查询用户拥有的所有角色
+    @Transactional(readOnly = true)
+    public List<SysPerm> findSysFuncPermsByAdminId(String adminId) {
+        return adminDao.findSysFuncPermsByAdminId(adminId);
+    }
 }

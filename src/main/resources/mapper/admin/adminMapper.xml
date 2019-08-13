@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="IAdminDao">
+<mapper namespace="cn.bt.btdemo.dao.IAdminDao">
     <!--########################################################generated code start,do not update################################################################-->
     <sql id="projection">
         <choose>
@@ -322,4 +322,16 @@
         </foreach>
     </insert>
     <!--##################################################generated code end,do not update######################################################################-->
+    <select id="findSysFuncPermsByAdminId" resultType="SysPerm">
+        select SP.identify,SP.url_path
+                 FROM admin A
+                 INNER JOIN admin_role AR
+                 ON A.id=AR.admin_id
+                 INNER JOIN sys_role SR
+                 ON AR.role_id= SR.id
+                 inner join role_perm RP on SR.id=RP.role_id
+                         inner join sys_perm SP on SP.id=RP.perm_id
+                         where A.id=#{adminId} and SP.type=1
+                         group by SP.id
+    </select>
 </mapper>

@@ -1,8 +1,82 @@
 package cn.bt.btdemo.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import cn.bt.btdemo.entity.ResponseJson;
+import cn.bt.btdemo.entity.admin.Admin;
+import cn.bt.btdemo.entity.admin.SysPerm;
+import cn.bt.btdemo.exception.AuthenticationException;
+import cn.bt.btdemo.model.jwt.JwtAuthenticationRequest;
+import cn.bt.btdemo.service.AdminService;
+import cn.bt.btdemo.util.JwtTokenUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Objects;
+
+@Slf4j
 @RestController
 public class LoginController {
+    @Value("${jwt.header}")
+    private String tokenHeader;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+    @Autowired
+    private AdminService adminService;
+    @Autowired
+    @Qualifier("jwtUserDetailsService")
+    private UserDetailsService userDetailsService;
+
+    @PostMapping("/login")
+    @RequestMapping(value = "/auth", method = RequestMethod.POST)
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest){
+
+        try{
+            authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+            final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+            final String token = jwtTokenUtil.generateToken(userDetails);
+            Admin admin = new Admin();
+            admin.setUsername(userDetails.getUsername());
+            Admin a =adminService.findOneAdminByCondition(admin);
+
+            //查询该用户拥有的所有角色
+            List<SysPerm> permList=adminService.findSysFuncPermsByAdminId(a.getId()+"");
+            a.setPassword("****");
+            return ResponseEntity.ok(new ResponseJson(token,permList,a));
+        }catch (Exception e){
+            log.error("", e);
+            return ResponseEntity.ok(new ResponseJson(false,"账号不存在或已被禁用"));
+        }
+    }
+
+    /**
+     * Authenticates the user. If something is wrong, an {@link AuthenticationException} will be thrown
+     */
+    private void authenticate(String username, String password) {
+        //校验空
+        Objects.requireNonNull(username);
+        Objects.requireNonNull(password);
+
+        try {
+            //校验密码
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        } catch (DisabledException e) {
+            throw new AuthenticationException("User is disabled!(没有用的用户)", e);
+        } catch (BadCredentialsException e) {
+            throw new AuthenticationException("Bad credentials!(坏证书)", e);
+        }
+    }
+
     
 }
