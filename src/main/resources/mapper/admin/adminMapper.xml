@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="IAdminDao">
+    <!--########################################################generated code start,do not update################################################################-->
+    <sql id="projection">
+        <choose>
+             <when test="pager!=null and pager.includes!=null">
+                 <foreach collection="pager.includes" item="field" separator=",">
+                     T.${@cn.hutool.core.util.StrUtil@toUnderlineCase(field)}
+                 </foreach>
+             </when>
+             <when test="pager!=null and pager.excludes!=null">
+                 <trim suffixOverrides=",">
+                         <if test="!pager.excludes.contains('id')">
+                             T.id,
+                         </if>
+                         <if test="!pager.excludes.contains('username')">
+                             T.username,
+                         </if>
+                         <if test="!pager.excludes.contains('password')">
+                             T.password,
+                         </if>
+                         <if test="!pager.excludes.contains('realName')">
+                             T.real_name,
+                         </if>
+                         <if test="!pager.excludes.contains('phone')">
+                             T.phone,
+                         </if>
+                         <if test="!pager.excludes.contains('email')">
+                             T.email,
+                         </if>
+                         <if test="!pager.excludes.contains('portrait')">
+                             T.portrait,
+                         </if>
+                         <if test="!pager.excludes.contains('createTime')">
+                             T.create_time,
+                         </if>
+                         <if test="!pager.excludes.contains('organizationId')">
+                             T.organization_id,
+                         </if>
+                         <if test="!pager.excludes.contains('cityId')">
+                             T.city_id,
+                         </if>
+                         <if test="!pager.excludes.contains('provinceId')">
+                             T.province_id,
+                         </if>
+                         <if test="!pager.excludes.contains('status')">
+                             T.status,
+                         </if>
+                         <if test="!pager.excludes.contains('type')">
+                             T.type,
+                         </if>
+                 </trim>
+             </when>
+             <otherwise>
+                 T.*
+             </otherwise>
+         </choose>
+    </sql>
+    <sql id="match">
+        <where>
+              <if test="id!=null">
+                    <choose>
+                         <when test="pager!=null and pager.like=='id'">
+                             T.id like concat('%',#{id},'%')
+                         </when>
+                         <otherwise>
+                             T.id=#{id}
+                         </otherwise>
+                      </choose>
+              </if>
+              <if test="username!=null">
+                    <choose>
+                         <when test="pager!=null and pager.like=='username'">
+                            and T.username like concat('%',#{username},'%')
+                         </when>
+                         <otherwise>
+                            and T.username=#{username}
+                         </otherwise>
+                      </choose>
+              </if>
+              <if test="password!=null">
+                    <choose>
+                         <when test="pager!=null and pager.like=='password'">
+                            and T.password like concat('%',#{password},'%')
+                         </when>
+                         <otherwise>
+                            and T.password=#{password}
+                         </otherwise>
+                      </choose>
+              </if>
+              <if test="realName!=null">
+                    <choose>
+                         <when test="pager!=null and pager.like=='realName'">
+                            and T.real_name like concat('%',#{realName},'%')
+                         </when>
+                         <otherwise>
+                            and T.real_name=#{realName}
+                         </otherwise>
+                      </choose>
+              </if>
+              <if test="phone!=null">
+                    <choose>
+                         <when test="pager!=null and pager.like=='phone'">
+                            and T.phone like concat('%',#{phone},'%')
+                         </when>
+                         <otherwise>
+                            and T.phone=#{phone}
+                         </otherwise>
+                      </choose>
+              </if>
+              <if test="email!=null">
+                    <choose>
+                         <when test="pager!=null and pager.like=='email'">
+                            and T.email like concat('%',#{email},'%')
+                         </when>
+                         <otherwise>
+                            and T.email=#{email}
+                         </otherwise>
+                      </choose>
+              </if>
+              <if test="portrait!=null">
+                    <choose>
+                         <when test="pager!=null and pager.like=='portrait'">
+                            and T.portrait like concat('%',#{portrait},'%')
+                         </when>
+                         <otherwise>
+                            and T.portrait=#{portrait}
+                         </otherwise>
+                      </choose>
+              </if>
+              <if test="createTime!=null">
+                    <choose>
+                         <when test="pager!=null and pager.like=='createTime'">
+                            and T.create_time like concat('%',#{createTime},'%')
+                         </when>
+                         <otherwise>
+                            and T.create_time=#{createTime}
+                         </otherwise>
+                      </choose>
+              </if>
+              <if test="organizationId!=null">
+                    and T.organization_id=#{organizationId}
+              </if>
+              <if test="cityId!=null">
+                    <choose>
+                         <when test="pager!=null and pager.like=='cityId'">
+                            and T.city_id like concat('%',#{cityId},'%')
+                         </when>
+                         <otherwise>
+                            and T.city_id=#{cityId}
+                         </otherwise>
+                      </choose>
+              </if>
+              <if test="provinceId!=null">
+                    <choose>
+                         <when test="pager!=null and pager.like=='provinceId'">
+                            and T.province_id like concat('%',#{provinceId},'%')
+                         </when>
+                         <otherwise>
+                            and T.province_id=#{provinceId}
+                         </otherwise>
+                      </choose>
+              </if>
+              <if test="status!=null">
+                    and T.status=#{status}
+              </if>
+              <if test="type!=null">
+                    and T.type=#{type}
+              </if>
+            <if test="pager!=null and pager.rangeField!=null and pager.rangeArray!=null and pager.rangeArray.length==2">
+                <foreach collection="pager.rangeArray" item="item"  index="i">
+                    <if test="i==0 and item!=null">
+                        and ${@cn.hutool.core.util.StrUtil@toUnderlineCase(pager.rangeField)} &gt;= #{item}
+                    </if>
+                    <if test="i==1 and item!=null">
+                        and ${@cn.hutool.core.util.StrUtil@toUnderlineCase(pager.rangeField)} &lt;= #{item}
+                    </if>
+                </foreach>
+
+            </if>
+        </where>
+    </sql>
+    <sql id="sort">
+        <if test="pager!=null and pager.sortField!=null and pager.sortOrder!=null">
+            order by
+            <foreach collection="pager.sortField.split(',')" item="s" index="i" separator=",">
+                T.${@cn.hutool.core.util.StrUtil@toUnderlineCase(s)} ${pager.sortOrder.split(',')[i]}
+            </foreach>
+        </if>
+    </sql>
+    <sql id="page">
+        <if test="pager!=null and  pager.paging">
+            limit #{pager.beginRow},#{pager.pageSize}
+        </if>
+    </sql>
+
+
+    <select id="findAdminListByCondition" parameterType="Admin" resultType="Admin">
+        select
+         <include refid="projection"/>
+         from admin T
+         <include refid="match"/>
+         <include refid="sort"/>
+         <include refid="page"/>
+
+
+    </select>
+    <select id="findAdminCountByCondition" parameterType="Admin" resultType="long">
+        select count(*) from admin T
+        <include refid="match"/>
+    </select>
+    <select id="findAdminById" resultType="Admin">
+        select * from admin where id=#{id}
+    </select>
+    <select id="findOneAdminByCondition" parameterType="Admin" resultType="Admin">
+        select
+         <include refid="projection"/>
+         from admin T
+        <include refid="match"/>
+    </select>
+    <insert id="saveAdmin" parameterType="Admin">
+        insert into admin
+         (
+            id,
+            username,
+            password,
+            real_name,
+            phone,
+            email,
+            portrait,
+            create_time,
+            organization_id,
+            city_id,
+            province_id,
+            status,
+            type
+        ) values
+         (
+                #{id}
+                ,
+                #{username}
+                ,
+                #{password}
+                ,
+                #{realName}
+                ,
+                #{phone}
+                ,
+                #{email}
+                ,
+                #{portrait}
+                ,
+                now()
+                ,
+                #{organizationId}
+                ,
+                #{cityId}
+                ,
+                #{provinceId}
+                ,
+                #{status}
+                ,
+                #{type}
+                
+         )
+    </insert>
+    <update id="updateAdmin" parameterType="Admin">
+        update admin
+        <set>
+                    <if test="username!=null ">
+                        username=#{username},
+                    </if>
+                    <if test="password!=null ">
+                        password=#{password},
+                    </if>
+                    <if test="realName!=null ">
+                        real_name=#{realName},
+                    </if>
+                    <if test="phone!=null ">
+                        phone=#{phone},
+                    </if>
+                    <if test="email!=null ">
+                        email=#{email},
+                    </if>
+                    <if test="portrait!=null ">
+                        portrait=#{portrait},
+                    </if>
+                    <if test="createTime!=null ">
+                        create_time=#{createTime},
+                    </if>
+                    <if test="organizationId!=null ">
+                        organization_id=#{organizationId},
+                    </if>
+                    <if test="cityId!=null ">
+                        city_id=#{cityId},
+                    </if>
+                    <if test="provinceId!=null ">
+                        province_id=#{provinceId},
+                    </if>
+                    <if test="status!=null ">
+                        status=#{status},
+                    </if>
+                    <if test="type!=null ">
+                        type=#{type}
+                    </if>
+          </set>
+         where id=#{id}
+    </update>
+    <delete id="deleteAdmin" >
+        delete from admin where id=#{id}
+    </delete>
+    <delete id="deleteAdminByCondition" >
+        delete T from admin T
+        <include refid="match"/>
+    </delete>
+    <insert id="batchSaveAdmin" parameterType="Admin">
+        INSERT INTO admin (  id,  username,  password,  real_name,  phone,  email,  portrait,  create_time,  organization_id,  city_id,  province_id,  status,  type )
+        VALUES
+        <foreach collection="list" item="admin" separator=",">
+            (  #{admin.id},  #{admin.username},  #{admin.password},  #{admin.realName},  #{admin.phone},  #{admin.email},  #{admin.portrait},  #{admin.createTime},  #{admin.organizationId},  #{admin.cityId},  #{admin.provinceId},  #{admin.status},  #{admin.type}  )
+        </foreach>
+    </insert>
+    <!--##################################################generated code end,do not update######################################################################-->
+</mapper>
