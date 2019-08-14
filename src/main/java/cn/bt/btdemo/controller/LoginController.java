@@ -43,9 +43,10 @@ public class LoginController {
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest){
 
         try{
+            //校验密码
             authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
             final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-            final String token = jwtTokenUtil.generateToken(userDetails);
+            final String token = jwtTokenUtil.generateToken(userDetails);//生成token
             Admin admin = new Admin();
             admin.setUsername(userDetails.getUsername());
             Admin a =adminService.findOneAdminByCondition(admin);
