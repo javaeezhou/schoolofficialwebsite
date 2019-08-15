@@ -40,7 +40,7 @@ mybatis:
     map-underscore-to-camel-case: true
     #log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-jwt:zq
+jwt:
   header: Authorization
-  secret:  zq 盐
+  secret:  zq # 盐
   expiration: 604800

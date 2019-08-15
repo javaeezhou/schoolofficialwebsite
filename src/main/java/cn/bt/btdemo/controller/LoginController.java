@@ -62,7 +62,9 @@ public class LoginController {
     }
 
     /**
-     * Authenticates the user. If something is wrong, an {@link AuthenticationException} will be thrown
+     * 完成用户名和密码的校验
+     * @param username
+     * @param password
      */
     private void authenticate(String username, String password) {
         //校验空
@@ -79,5 +81,4 @@ public class LoginController {
         }
     }
 
-    
 }
