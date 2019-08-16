@@ -40,19 +40,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      * @param auth
      * @throws Exception
      */
-    @Autowired
+    /*@Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .userDetailsService(jwtUserDetailsService)
                 .passwordEncoder(passwordEncoderBean());
-    }
+    }*/
 
-    /*@Override
+    @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
             .userDetailsService(jwtUserDetailsService)
             .passwordEncoder(passwordEncoderBean());
-    }*/
+    }
 
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
     @Override
@@ -78,9 +78,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             //开始限制请求
             .authorizeRequests()
-                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/login/**").permitAll()
                 .anyRequest().authenticated();
         http
             .addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+
+        // disable page caching
+        http
+            .headers()
+            .frameOptions().sameOrigin()  // required to set for H2 else H2 Console will be blank.
+            .cacheControl();
     }
 }

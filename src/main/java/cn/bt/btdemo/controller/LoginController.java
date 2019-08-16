@@ -38,8 +38,12 @@ public class LoginController {
     @Qualifier("jwtUserDetailsService")
     private UserDetailsService userDetailsService;
 
+    @GetMapping("/test")
+    public String test01(){
+        return "最美的不是下雨天，是曾与你躲过雨的屋檐~";
+    }
+
     @PostMapping("/login")
-    @RequestMapping(value = "/auth", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest){
 
         try{

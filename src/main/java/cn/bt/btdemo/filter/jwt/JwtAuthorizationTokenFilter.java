@@ -40,7 +40,7 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         logger.debug("processing authentication for '{}'", request.getRequestURL());
-
+        //从请求头中获取token
         final String requestHeader = request.getHeader(this.tokenHeader);
 
         String username = null;
@@ -72,13 +72,15 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
                 return;
             }
 
+            System.out.println("###################################### 我进来啦");
 
-            // For simple validation it is completely sufficient to just check the token integrity. You don't have to call
-            // the database compellingly. Again it's up to you ;)
+            // 如果上面解析 token 成功并且拿到了 username 并且本次会话的权限还未被写入
             if (jwtTokenUtil.validateToken(authToken, userDetails)) {
+                // 生成通过认证  这一步非常重要
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 logger.info("authorized user '{}', setting security context", username);
+                // 将权限写入本次会话
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }

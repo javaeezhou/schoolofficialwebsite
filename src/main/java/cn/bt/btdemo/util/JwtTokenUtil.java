@@ -68,6 +68,11 @@ public class JwtTokenUtil implements Serializable {
         return getClaimFromToken(token, Claims::getIssuedAt);
     }
 
+    /**
+     * 获取token失效时间
+     * @param token
+     * @return
+     */
     public Date getExpirationDateFromToken(String token) {
         return getClaimFromToken(token, Claims::getExpiration);
     }
@@ -111,7 +116,7 @@ public class JwtTokenUtil implements Serializable {
             .setClaims(claims)
             .setSubject(subject)
             .setIssuedAt(createdDate)
-            .setExpiration(expirationDate)
+            .setExpiration(expirationDate)//设置token失效时间
             .signWith(SignatureAlgorithm.HS512, secret)
             .compact();
     }
@@ -143,7 +148,7 @@ public class JwtTokenUtil implements Serializable {
         //final Date expiration = getExpirationDateFromToken(token);
         return (
             username.equals(user.getUsername())
-                && !isTokenExpired(token)
+                && !isTokenExpired(token)//判断失效时间
 //                && !isCreatedBeforeLastPasswordReset(created, user.getLastTime())
         );
     }
