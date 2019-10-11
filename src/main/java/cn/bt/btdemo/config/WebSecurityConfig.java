@@ -40,19 +40,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      * @param auth
      * @throws Exception
      */
-    /*@Autowired
+    @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .userDetailsService(jwtUserDetailsService)
                 .passwordEncoder(passwordEncoderBean());
-    }*/
+    }
 
-    @Override
+    /*@Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
             .userDetailsService(jwtUserDetailsService)
             .passwordEncoder(passwordEncoderBean());
-    }
+    }*/
 
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
     @Override
@@ -82,11 +82,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated();
         http
             .addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
-
         // disable page caching
         http
-            .headers()
-            .frameOptions().sameOrigin()  // required to set for H2 else H2 Console will be blank.
-            .cacheControl();
+            .headers() // 设置安全响应头
+            .frameOptions().sameOrigin()  //阻止点击劫持意思是页面只能被本站页面嵌入到iframe或者frame中。这样就解决了X-Frame-Options头未设置的漏洞。
+            .cacheControl(); //禁用对机密信息的缓存
     }
+
+
 }
