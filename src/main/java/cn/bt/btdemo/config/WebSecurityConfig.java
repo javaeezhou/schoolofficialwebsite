@@ -79,8 +79,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             //开始限制请求
             .authorizeRequests()
                 .antMatchers("/login/**").permitAll()
+                //任何请求都必须经过身份验证
                 .anyRequest().authenticated();
         http
+            // UsernamePasswordAuthenticationFilter 前添加 BeforeLoginFilter
             .addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
         // disable page caching
         http
